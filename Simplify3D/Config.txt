@@ -1,0 +1,59 @@
+
+Tools->Options 
+  Machine Tab
+    Build volume 255 255 200
+    
+Process Settings
+  Scipts
+    Starting Script Tab
+;
+; Starting Script - Start
+;
+M107 ; disable fan
+M190 S[bed0_temperature] ; set bed temperature
+M104 T10  S[extruder0_temperature]
+G21     ; use millimeters
+G90     ; absolute coordinates
+G0 Z5 ; lift head to avoid collisions
+G28 X0 Y0 ; home X and Y
+G92 X0 Y0 ; reset origin: X and Y
+G0 X0 Y0   ; move to desired origin
+G92 X0 Y0 ; reset origin: X and Y
+M83          ; relative extruder coordinates
+M109 S230  ;wait for temperture to come up.
+M756 S0.18  ;set flowfor the first layer please
+;
+G21 ; set units to millimeters
+G90 ; use absolute coordinates
+M82 ; use absolute distances for extrusion
+;
+; Starting Script - Stop
+;
+    Layer Change Script Tab
+;
+; Layer Change Script - Start
+;
+M790 ;execute any new layer actions
+;
+; Layer Change Script - Stop
+;
+     Ending Script Tab
+;
+; Ending Script - Start
+;
+M107 ; disable fan
+M107 T10  ; turn off fans and lasers
+M104 S0    ; turn off temperature
+M140 S0   ;turn off the hot bed.
+G91            ;
+G1 Z5.0      ; Drop bed 5mm for extra clearance 
+G90            ; absolute
+G28 X0 Y0  ; home X axis
+G92 X0 Y0 ; confirm we are at zero
+M84            ; disable motors
+M30           ; End ofprogram
+;
+; Ending Script - Stop
+;
+    Additional terminal command for post processing
+{REPLACE "T0" ";T0"}
